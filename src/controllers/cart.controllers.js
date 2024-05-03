@@ -2,29 +2,35 @@ const catchError = require('../utils/catchError');
 const Cart = require('../models/Cart');
 const Product = require('../models/Product');
 const Category = require('../models/Category');
+const ProductImg = require('../models/ProductImg');
 
 const getAll = catchError(async (req, res) => {
   const userId = req.user.id
   const results = await Cart.findAll({
-  where: { userId : userId },
-  include:[
-    {
-      model: Product,
-      attributes:{exclude:['createdAt','updareedAt']},
-      include:[{
-        model: Category,
-        attributes: ['name']
+    where: { userId: userId },
+    include: [
+      {
+        model: Product,
+        attributes: { exclude: ['createdAt', 'updatedAt'] },
+        include: [
+          {
+            model: Category,
+            attributes: ['name']
+          },
+          {
+            model: ProductImg,
+            attributes: ['url']
+          }
+        ]
       }
-     ]
-    } 
-  ]
-});
+    ]
+  });
   return res.json(results);
 });
 
 const create = catchError(async (req, res) => {
-  const userId = req.user.id
-  const { quantity, productId } = req.body
+  const userId = req.user.id 
+  const { quantity, productId } = req.body 
 
   const result = await Cart.create({ userId, quantity, productId });
   return res.status(201).json(result);
@@ -32,7 +38,9 @@ const create = catchError(async (req, res) => {
 
 const getOne = catchError(async (req, res) => {
   const { id } = req.params;
+
   const userId = req.user.id
+
   const result = await Cart.findByPk(id, {
     where: { userId: userId },
     include: [
@@ -43,6 +51,9 @@ const getOne = catchError(async (req, res) => {
           {
             model: Category,
             attributes: ['name']
+          },
+          {
+            model: ProductImg
           }
         ]
       }
