@@ -27,21 +27,10 @@ const remove = catchError(async (req, res) => {
   return res.sendStatus(204);
 });
 
-const setImages = catchError(async( req,res )=>{
-  const {id} = req.params
-  const product = await Product.findByPk(id)
-  if (!product) res.sendStatus(404)
 
-  await product.setProductImg(req.body)
-
-const images = await product.getProductImg()
-
-return res.json(images)
-})
 
 module.exports = {
   getAll,
   create,
-  remove,
-  setImages
+  remove
 }

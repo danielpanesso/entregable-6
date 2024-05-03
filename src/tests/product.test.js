@@ -98,7 +98,7 @@ async()=>{
   image = await  ProductImg.create(imagebody)
   
   const res= await request(app)
-  .put(`${URL_BASE}/${productId}/images`)
+  .post(`${URL_BASE}/${productId}/images`)
   .send([image.id])
   .set('Authorization',`Bearer ${TOKEN}`)
 
